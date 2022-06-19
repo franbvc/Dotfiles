@@ -105,7 +105,17 @@ layouts = [
     # layout.Columns(border_normal="#2b2d55", border_focus="#4d21fc", border_focus_stack=["#a599e9", "#4d21fc"], border_width=4, margin=3),
     # layout.Columns(border_normal="#2b2d55", border_focus="#a599e9", border_focus_stack=["#a599e9", "#4d21fc"], border_width=2, margin=3),
     # layout.Columns(border_normal="#1e1e3f", border_focus="#4d21fc", border_focus_stack=["#a599e9", "#4d21fc"], border_width=2, margin=3),
-    layout.Columns(border_normal="#4a4569", border_focus="#a599e9", border_focus_stack=["#a599e9", "#4d21fc"], border_width=2, margin=3),
+    layout.Columns(# border_normal="#282a36",
+                   border_normal="44475a",
+                   # border_focus="#535a82", 
+                   border_focus="#6272a4", 
+                   # border_focus="#44475a", 
+
+                   border_focus_stack=["#a599e9", "#4d21fc"], 
+                   border_width=2, 
+                   margin=3,
+                   margin_on_single=3,
+                   fair=True),
     layout.Max(),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
@@ -121,20 +131,21 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="sans",
-    fontsize=12,
+    font="JetBrains Mono",
+    fontsize=15,
     padding=3,
 )
 extension_defaults = widget_defaults.copy()
 
 screens = [
     Screen(
-        bottom=bar.Bar(
+        top=bar.Bar(
             [
-                widget.CurrentLayout(),
-                widget.GroupBox(),
+                widget.GroupBox(this_current_screen_border="#6272a4", borderwidth=2),
                 widget.Prompt(),
                 widget.WindowName(),
+                widget.CPU(),
+                widget.CryptoTicker(crypt="BTC", currency="USD", symbol="$"),
                 widget.CryptoTicker(crypto="ETH", currency="BRL", symbol="R$"),
                 widget.Chord(
                     chords_colors={
@@ -142,15 +153,25 @@ screens = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-                widget.TextBox("default config", name="default"),
-                widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
                 widget.Systray(),
                 widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
                 widget.QuickExit(),
             ],
-            24,
-            # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
-            # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
+            30,
+            #background="#535a82",
+            #border_color=["#282a36", "#282a36", "282a36", "282a36"],  # Borders are magenta
+            background="#282a36",
+            # border_color=["#535a82", 
+            #               "#535a82", 
+            #               "#535a82", 
+            #               "#535a82"],
+            border_color=["#6272a4", 
+                          "#6272a4", 
+                          "#6272a4", 
+                          "#6272a4"],
+            border_width=[2, 2, 2, 2],  # Draw top and bottom borders
+            margin=3,
+            opacity=0.95
         ),
     ),
 ]
