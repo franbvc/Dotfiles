@@ -24,10 +24,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import os
 from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
+from color_palette import color_name, color_palette, palette_list
 
 mod = "mod4"
 terminal = guess_terminal()
@@ -137,38 +139,83 @@ widget_defaults = dict(
 )
 extension_defaults = widget_defaults.copy()
 
+# uniform_color = "#23294f"
+uniform_color = "#6272a4"
+
+small_sep = widget.Sep(
+    linewidth = 2,
+    padding = 6,
+    # foreground = color_palette["foreground"],
+    # background = color_palette["background"]
+    foreground = color_palette["background"],
+    background = "6272a4"
+)
+
+large_sep = widget.Sep(
+    linewidth = 0,
+    padding = 5,
+    foreground = color_palette["foreground"],
+    background = color_palette["background"]
+
+)
+
+widget_list = [
+    widget.LaunchBar(
+        [("firefox", "firefox", "launch firefox"),
+         ("discord", "discord", "launch discord"),
+         ("doom emacs", "emacsclient -c -a 'vim'", "launch emacs")],
+        default_icon='/home/franbvc/.config/qtile/icons/doom_emacs.png'
+    ),
+
+    small_sep,
+
+    widget.GroupBox(this_current_screen_border="#6272a4", borderwidth=2),
+    small_sep,
+    widget.Prompt(),
+    widget.WindowName(),
+    widget.CPU(),
+    small_sep,
+    widget.CryptoTicker(crypt="BTC", currency="USD", symbol="$"),
+    small_sep,
+    widget.CryptoTicker(crypto="ETH", currency="BRL", symbol="R$"),
+    widget.Chord(
+        chords_colors={
+            "launch": ("#ff0000", "#ffffff"),
+        },
+        name_transform=lambda name: name.upper(),
+    ),
+    widget.Systray(),
+    small_sep,
+    widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
+    small_sep,
+    widget.QuickExit(
+        font="JetBrains Mono",
+        fontsize=20,
+        padding=8,
+        default_text='⏻',
+        countdown_format='{}'
+    ),
+]
+
+uniform_color = "#6272a4"
 screens = [
     Screen(
         top=bar.Bar(
-            [
-                widget.GroupBox(this_current_screen_border="#6272a4", borderwidth=2),
-                widget.Prompt(),
-                widget.WindowName(),
-                widget.CPU(),
-                widget.CryptoTicker(crypt="BTC", currency="USD", symbol="$"),
-                widget.CryptoTicker(crypto="ETH", currency="BRL", symbol="R$"),
-                widget.Chord(
-                    chords_colors={
-                        "launch": ("#ff0000", "#ffffff"),
-                    },
-                    name_transform=lambda name: name.upper(),
-                ),
-                widget.Systray(),
-                widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
-                widget.QuickExit(),
-            ],
+            widget_list,
             30,
-            #background="#535a82",
+            # background="#8a7be3",
             #border_color=["#282a36", "#282a36", "282a36", "282a36"],  # Borders are magenta
-            background="#282a36",
-            # border_color=["#535a82", 
-            #               "#535a82", 
-            #               "#535a82", 
+            # background="#282a36",
+            # border_color=["#535a82",
+            #               "#535a82",
+            #               "#535a82",
             #               "#535a82"],
-            border_color=["#6272a4", 
-                          "#6272a4", 
-                          "#6272a4", 
-                          "#6272a4"],
+            # border_color=["#6272a4",
+            #              "#6272a4",
+            #              "#6272a4",
+            #              "#6272a4"],
+            background = uniform_color,
+            border_color = [uniform_color]*4,
             border_width=[2, 2, 2, 2],  # Draw top and bottom borders
             margin=3,
             opacity=0.95
