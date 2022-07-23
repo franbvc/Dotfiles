@@ -193,7 +193,7 @@ screens = [
         top=bar.Bar(
             [
                 group_box,
-                widget.Spacer(),
+                widget.Spacer(length=10),
                 window_name,
                 sys_tray,
                 default_spacer,
