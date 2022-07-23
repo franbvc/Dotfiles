@@ -30,6 +30,8 @@ from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 
+from widget_list import *
+
 mod = "mod4"
 # terminal = guess_terminal()
 terminal = "kitty"
@@ -38,6 +40,7 @@ terminal = "kitty"
 # terminal = "prime-run kitty"
 
 browser = "firefox"
+app_launcher = "rofi -show"
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -87,6 +90,8 @@ keys = [
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    ### Toggle fullscreen
+    Key([mod], "f", lazy.window.toggle_fullscreen(), desc="Toggle window fullscreen"),
     ### Monad Tall keys
     # Shrink and Grow
     Key([mod], "i", lazy.layout.grow(), desc="Grow pane in focus"),
@@ -104,8 +109,8 @@ keys = [
         lazy.layout.flip(),
         desc="Switch which horizontal side the main pane will occupy",
     ),
-    ### Browser
-    Key([mod], "BackSpace", lazy.spawn(browser), desc="Launch browser"),
+    ### App Launcher
+    Key([mod], "BackSpace", lazy.spawn(app_launcher), desc="Launch App Launcher"),
 ]
 
 groups = [Group(i) for i in "123456789"]
@@ -141,8 +146,8 @@ layouts = [
         border_normal="#1E1526",
         border_focus="#BA3C6A",
         border_width=3,
-        margin=[8, 5, 8, 5],
-        margin_on_single=[8, 10, 8, 10],
+        margin=[8, 10, 8, 10],
+        margin_on_single=[10, 10, 10, 10],
         fair=True,
     ),
     layout.Max(),
@@ -170,58 +175,45 @@ layouts = [
 
 widget_defaults = dict(
     # font="JetBrains Mono Regular Nerd Font Complete Mono",
-    font="JetBrains Mono Nerd Font Mono",
+    font="JetBrainsMono Nerd Font Mono",
     fontsize=15,
     padding=3,
 )
 extension_defaults = widget_defaults.copy()
+space = widget.Sep(
+    foreground="00000000",
+    linewidth=5,
+)
+
+default_spacer = widget.Spacer(length=10)
 
 screens = [
     Screen(
+        bottom=bar.Gap(0),
         top=bar.Bar(
             [
-                widget.LaunchBar(
-                    [
-                        ("firefox", "firefox", "launch firefox"),
-                        ("discord", "discord", "launch discord"),
-                        ("doom emacs", "emacsclient -c -a 'vim'", "launch emacs"),
-                    ],
-                    default_icon="/home/franbvc/.config/qtile/icons/cacodemon-gnarly.png",
-                    padding=5,
-                ),
-                widget.CurrentLayout(),
-                widget.GroupBox(),
-                widget.Prompt(),
-                widget.WindowName(),
-                widget.Chord(
-                    chords_colors={
-                        "launch": ("#ff0000", "#ffffff"),
-                    },
-                    name_transform=lambda name: name.upper(),
-                ),
-                widget.Battery(
-                    format="{char} {percent:2.0%}",
-                    show_short_text=False,
-                    charge_char="",
-                    discharge_char="",
-                    empty_char="",
-                    full_char="",
-                    low_foreground="#f7768e",
-                    low_percentage=0.4,
-                ),
-                widget.Systray(),
-                widget.Clock(format="%d-%m-%y %a %H:%M"),
-                widget.QuickExit(
-                    font="JetBrains Mono Nerd Font Mono",
-                    fontsize=20,
-                    padding=5,
-                    default_text="",
-                    countdown_format="{}",
-                ),
+                group_box,
+                widget.Spacer(),
+                window_name,
+                sys_tray,
+                default_spacer,
+                engine_symbol,
+                cpu,
+                default_spacer,
+                battery,
+                default_spacer,
+                clock,
+                default_spacer,
+                quick_exit,
+                default_spacer,
             ],
             40,
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
             # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
+            # background="#00000000", # Make bar transparent
+            margin=[4, 10, 2, 10],
+            # Note: opacity only works if you select a background color
+            # Add: opacity makes widgets transparent too
         ),
     ),
 ]
