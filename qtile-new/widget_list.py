@@ -1,4 +1,5 @@
 from libqtile import widget
+from libqtile.lazy import lazy
 
 
 ###########################
@@ -47,11 +48,13 @@ cpu = widget.CPU(
     # format=" {load_percent}%",
     format="{load_percent}%",
     font="JetBrainsMono Nerd Font Mono",
+    mouse_callbacks={"Button1": lazy.spawn("kitty htop")},
 )
 engine_symbol = widget.TextBox(
     text="",
     fontsize=25,
     padding=9,
+    mouse_callbacks={"Button1": lazy.spawn("kitty htop")},
 )
 
 
