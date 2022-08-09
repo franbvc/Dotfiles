@@ -1,5 +1,7 @@
 local nnoremap = require("franbvc.keymap").nnoremap
 
+-- :help key-notation
+
 -- Open newrt
 nnoremap("<leader>pv", "<cmd>Ex<CR>")
 
@@ -89,6 +91,6 @@ nnoremap("<leader>bp", "<cmd>bp<CR>")
 nnoremap("<leader>bd", "<cmd>bd<CR>")
 nnoremap("<leader>bk", "<cmd>bd<CR>")
 
--- Save file in buffer
+-- Save current buffer file
 nnoremap("<leader>bs", "<cmd>w<CR>")
 
